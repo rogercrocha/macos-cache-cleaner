@@ -2,7 +2,7 @@
 
 # =============================================================
 # macOS Cache Cleaner
-# Version: 1.0
+# Version: 1.0.2
 # https://github.com/rogercrocha/macos-cache-cleaner
 #
 # Como usar no Atalhos / How to use in Shortcuts:
@@ -195,6 +195,10 @@ RUNNING_APPS=$(osascript -e '
     return appList as text
 ' 2>/dev/null || echo "")
 
+# Check menu bar apps separately (not captured by AppleScript foreground list)
+ONEDRIVE_WAS_RUNNING=$(pgrep -x OneDrive >/dev/null 2>&1 && echo "yes" || echo "no")
+TEAMS_WAS_RUNNING=$(pgrep -x "Microsoft Teams" >/dev/null 2>&1 && echo "yes" || echo "no")
+
 # ============================================================
 # ESTIMATE SIZES
 # ============================================================
@@ -202,8 +206,8 @@ RUNNING_APPS=$(osascript -e '
 GENERAL_CACHE_KB=0
 if [ -d "$HOME/Library/Caches" ]; then
     FULL_KB=$(du -sk "$HOME/Library/Caches" 2>/dev/null | awk '{print $1}')
-    M_KB=0; [ -d "$HOME/Library/Caches/com.apple.mail" ] && M_KB=$(du -sk "$HOME/Library/Caches/com.apple.mail" 2>/dev/null | awk '{print $1}')
-    MB_KB=0; [ -d "$HOME/Library/Caches/com.apple.mbuseragent" ] && MB_KB=$(du -sk "$HOME/Library/Caches/com.apple.mbuseragent" 2>/dev/null | awk '{print $1}')
+    M_KB=$(find "$HOME/Library/Caches" -maxdepth 1 -iname "com.apple.mail" -exec du -sk {} + 2>/dev/null | awk '{s+=$1} END {printf "%d", s+0}')
+    MB_KB=$(find "$HOME/Library/Caches" -maxdepth 1 -iname "com.apple.mbuseragent" -exec du -sk {} + 2>/dev/null | awk '{s+=$1} END {printf "%d", s+0}')
     GENERAL_CACHE_KB=$((FULL_KB - M_KB - MB_KB))
 fi
 
@@ -222,10 +226,10 @@ BREW_KB=0; [ -d "$HOME/Library/Caches/Homebrew" ] && BREW_KB=$(du -sk "$HOME/Lib
 TOTAL_BASE_KB=$((GENERAL_CACHE_KB + LOGS_KB + SAFARI_KB + CHROME_KB + FIREFOX_KB + ARC_KB + DIA_KB + EDGE_KB + XCODE_KB + NPM_KB + PIP_KB + BREW_KB))
 TOTAL_BASE_HR=$(format_size_kb $TOTAL_BASE_KB)
 
-# Mail
+# Mail (using find -iname to match regardless of case)
 MAIL_CACHE_KB=0
-[ -d "$HOME/Library/Caches/com.apple.mail" ] && MAIL_CACHE_KB=$(du -sk "$HOME/Library/Caches/com.apple.mail" 2>/dev/null | awk '{print $1}')
-[ -d "$HOME/Library/Caches/com.apple.mbuseragent" ] && MAIL_CACHE_KB=$((MAIL_CACHE_KB + $(du -sk "$HOME/Library/Caches/com.apple.mbuseragent" 2>/dev/null | awk '{print $1}')))
+MAIL_CACHE_KB=$(find "$HOME/Library/Caches" -maxdepth 1 -iname "com.apple.mail" -exec du -sk {} + 2>/dev/null | awk '{s+=$1} END {printf "%d", s+0}')
+MAIL_CACHE_KB=$((MAIL_CACHE_KB + $(find "$HOME/Library/Caches" -maxdepth 1 -iname "com.apple.mbuseragent" -exec du -sk {} + 2>/dev/null | awk '{s+=$1} END {printf "%d", s+0}')))
 MAIL_CACHE_HR=$(format_size_kb $MAIL_CACHE_KB)
 
 # OneDrive
@@ -424,10 +428,24 @@ log_entry "$RPT_RESTART"
 
 echo "$REPORT"
 
+# Save report and open in TextEdit
+REPORT_FILE="$TMPDIR/cache_cleaner_report.txt"
+echo "$REPORT" > "$REPORT_FILE"
+open -e "$REPORT_FILE"
+
 # ============================================================
 # REOPEN APPS
 # ============================================================
 
+# Reopen menu bar apps first (not captured by AppleScript foreground list)
+if [ "$ONEDRIVE_WAS_RUNNING" = "yes" ]; then
+    open -a OneDrive 2>/dev/null || true
+fi
+if [ "$TEAMS_WAS_RUNNING" = "yes" ]; then
+    open -a "Microsoft Teams" 2>/dev/null || true
+fi
+
+# Reopen foreground apps
 if [ -n "$RUNNING_APPS" ]; then
     SKIP_REOPEN="Finder Shortcuts SystemUIServer Control Center Notification Center Dock Spotlight WindowManager Window Manager AirPlayUIAgent TextInputMenuAgent universalAccessAuthWarn CoreServicesUIAgent loginwindow"
 
