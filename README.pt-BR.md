@@ -2,7 +2,7 @@
 
 # macOS Cache Cleaner
 
-![Versão](https://img.shields.io/badge/versão-1.0-blue)
+![Versão](https://img.shields.io/badge/versão-1.0.2-blue)
 
 Script shell para limpar caches do macOS, dados de navegadores, arquivos temporários do OneDrive e cache do Microsoft Teams. Projetado para rodar pelo app **Atalhos (Shortcuts)** do macOS.
 
