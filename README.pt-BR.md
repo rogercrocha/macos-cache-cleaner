@@ -42,7 +42,15 @@ Todos os dados removidos são **arquivos temporários e caches** que o macOS e o
 
 > **Nenhum arquivo fora de `~/Library` e `~/.npm` é tocado.**
 
-## Como usar
+## Instalação rápida
+
+[![Adicionar aos Atalhos](https://img.shields.io/badge/Adicionar_aos_Atalhos-blue?logo=apple&logoColor=white&style=for-the-badge)](https://www.icloud.com/shortcuts/fa7988e43e2f46ebabb1334939bf2d66)
+
+Clique no botão acima para instalar o atalho diretamente no seu Mac.
+
+## Instalação manual
+
+Se preferir configurar manualmente:
 
 1. Abra o app **Atalhos** no macOS
 2. Crie um novo atalho
@@ -52,6 +60,7 @@ Todos os dados removidos são **arquivos temporários e caches** que o macOS e o
    - **Shell:** `/bin/bash`
    - **Entrada:** `Nenhuma`
 6. Salve o atalho com o nome que preferir (ex: "Limpar Cache")
+
 
 ## Requisitos
 
