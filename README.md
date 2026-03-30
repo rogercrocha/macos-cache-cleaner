@@ -42,7 +42,15 @@ All cleaned data consists of **temporary files and caches** that macOS and appli
 
 > **Nothing outside `~/Library` and `~/.npm` is ever touched.**
 
-## How to use
+## Quick install
+
+[![Add to Shortcuts](https://img.shields.io/badge/Add_to_Shortcuts-blue?logo=apple&logoColor=white&style=for-the-badge)](https://www.icloud.com/shortcuts/fa7988e43e2f46ebabb1334939bf2d66)
+
+Click the button above to install the shortcut directly on your Mac.
+
+## Manual install
+
+If you prefer to set it up manually:
 
 1. Open the **Shortcuts** app on macOS
 2. Create a new shortcut
