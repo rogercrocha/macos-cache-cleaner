@@ -2,7 +2,10 @@
 
 # macOS Cache Cleaner
 
-![Version](https://img.shields.io/badge/version-1.0.2-blue)
+> [!WARNING]
+> **This project is no longer maintained.** Use [Mole](https://github.com/tw93/Mole) instead — it is free, more complete and actively developed. The script below remains available for reference only.
+
+![Version](https://img.shields.io/badge/version-1.0.2-blue) ![Status](https://img.shields.io/badge/status-archived-lightgrey)
 
 Shell script to clean macOS caches, browser data, OneDrive temp files, and Microsoft Teams cache. Designed to run via the macOS **Shortcuts** app.
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## Discontinued — 2026-10-15
+
+This project is no longer maintained. Use [Mole](https://github.com/tw93/Mole) instead.
+
 ## [1.0.2] — 2026-03-30
 
 ### Fixed
